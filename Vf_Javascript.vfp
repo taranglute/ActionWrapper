@@ -1,0 +1,120 @@
+<apex:page controller="Ctrl_Javascript">
+	
+    <script type="text/javascript">
+        (function(_window,_document,ajaxRequest){
+            let configuration={
+            	selector:"input[data-action='register']"
+            }
+            
+        	this.ActionWrapper=function(){
+                if (arguments[0] && typeof arguments[0] === "object") {
+					configuration=extendDefaults(configuration, arguments[0]);
+                }
+            }
+            
+            function onclick(){
+                const scope=this;
+                let actFunction=scope.dataset.actionfunction;
+                let parameters=scope.dataset.parameter;
+                let defaultvalue=scope.dataset.default;
+                
+                let selectors=parameters.split(",");
+                let values=[];
+                selectors.forEach(function(dom,index){
+                    var domEle=document.querySelector(dom);
+                    if(!!domEle.value && domEle.value.trim().length>0){
+                    	values.push(domEle.value);
+                    }else{
+                    	if(!!domEle.dataset["defaultvalue"]){
+                        	values.push(domEle.dataset["defaultvalue"]);
+                        }else{
+                        	values.push("");
+                        }
+                    }
+                });
+                if(!!defaultvalue){
+                    values.push(defaultvalue);
+                }
+                window[actFunction].apply(null,values);
+          	}
+            
+            // Utility method to extend defaults with user options
+            let extendDefaults=(source, properties)=>{
+                var property;
+                for (property in properties) {
+                    if (properties.hasOwnProperty(property)) {
+                        source[property] = properties[property];
+                    }
+                }
+                return source;
+            }
+            
+            this.ActionWrapper.prototype.config=configuration;
+        
+            this.ActionWrapper.prototype.Initialize=()=>{
+            	let eleSelector=configuration.selector;
+                let eleCount=_document.querySelectorAll(eleSelector);
+                SubscribeEvents(eleCount);
+            }
+            
+            let SubscribeEvents=(domElements)=>{
+            	domElements.forEach(function(domElement,index){
+                    let actionfunction=domElement.dataset.actionfunction;
+                    if(!!actionfunction){
+                        domElement.addEventListener("click",onclick,false);
+                    }
+            	});
+            }
+            
+            XMLHttpRequest.prototype.open = function(method, url, async, user, pass) {
+                this.addEventListener("readystatechange", function() {
+                    console.log(this.readyState); // this one I changed
+                }, false);
+                ajaxRequest.call(this, method, url, async, user, pass);
+            };
+
+            _window.onload=function(){
+         		let wrapper=new ActionWrapper();
+         		wrapper.Initialize();
+                console.log("loaded");
+            }
+                
+        })(window,document,XMLHttpRequest.prototype.open);
+    </script>
+    
+    <apex:form >
+        
+        <input id="txt1" type="text"/>
+        <input id="txt2" type="text" data-defaultvalue="somemorevalues"/>
+        
+        <input id="btnAction1" type="button" data-action="register" data-actionfunction="act1" data-parameter="#txt1" value="Action1"/>
+        <input id="btnAction3" type="button" data-action="register" data-actionfunction="act3" data-parameter="#txt1,#txt2" data-default="somemorevalues" value="Action2"/>
+        <input id="btnAction4" type="button" value="Action3"/>
+        
+        <!-- Action Function Starts-->
+        <apex:actionFunction name="act1" action="{!ActionCall}" reRender="dummy">
+        	<apex:param name="param1" assignTo="{!parameter1}" value=""/>
+        </apex:actionFunction>
+        
+        <apex:actionFunction name="act2" action="{!ActionCall}" reRender="dummy">
+        	<apex:param name="param1" assignTo="{!parameter1}" value=""/>
+            <apex:param name="param2" assignTo="{!parameter2}" value=""/>
+        </apex:actionFunction>
+        
+        <apex:actionFunction name="act3" action="{!ActionCall}" reRender="dummy">
+        	<apex:param name="param1" assignTo="{!parameter1}" value=""/>
+            <apex:param name="param2" assignTo="{!parameter2}" value=""/>
+            <apex:param name="param3" assignTo="{!parameter3}" value=""/>
+        </apex:actionFunction>
+        
+        <apex:actionFunction name="act4" action="{!ActionCall}">
+        	<apex:param name="param1" assignTo="{!parameter1}" value=""/>
+            <apex:param name="param2" assignTo="{!parameter2}" value=""/>
+            <apex:param name="param3" assignTo="{!parameter3}" value=""/>
+            <apex:param name="param4" assignTo="{!parameter4}" value=""/>
+        </apex:actionFunction>
+        
+        <!-- Action Function Ends-->
+       
+    </apex:form>
+</apex:page>
