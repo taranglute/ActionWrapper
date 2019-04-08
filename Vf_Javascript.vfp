@@ -88,7 +88,7 @@
         <input id="txt2" type="text" data-defaultvalue="somemorevalues"/>
         
         <input id="btnAction1" type="button" data-action="register" data-actionfunction="act1" data-parameter="#txt1" value="Action1"/>
-        <input id="btnAction3" type="button" data-action="register" data-actionfunction="act3" data-parameter="#txt1,#txt2" data-default="somemorevalues" value="Action2"/>
+        <input id="btnAction3" type="button" data-action="register" data-actionfunction="act3" data-parameter="#txt1,#txt2" value="Action2"/>
         <input id="btnAction4" type="button" value="Action3"/>
         
         <!-- Action Function Starts-->
