@@ -12,15 +12,19 @@ Instead of creating or writing js functions, all you need to do is, add configur
 
 # Configuration Directives
 
-*Button Directives*
+***Button Directives***
 
 - **data-action** : This directive help wrapper to filter out buttons which will invoke action functions.
 - **data-actionfunction** - This directive tells wrapper which action function need to be invoked.
 - **data-parameter** - This directive tells wrapper, fields values that need to pass to action function. Field order is important.
 
-*input directives*
+***Input Directives***
 
 - **data-defaultvalue** - If element value is null or empty, what should be the default value that need to pass to action function.
+
+# Development In-Progress
+
+- *Support to checkbox or multiselect picklist in-progress.*
 
 # Upcoming Enhancements
 
